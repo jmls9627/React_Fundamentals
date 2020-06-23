@@ -3,9 +3,31 @@ import React from 'react';
 import './App.css';
 import './bootstrap.min.css';
 
+
+function Hero(){
+  return (<div/> )
+}
+ 
+function Turn(){
+return(
+  <div/>
+);
+}
+function Continue(){
+return(
+  <div/>
+);
+}
+
+
+
 function AuthorQuiz() {
   return (
-   <div>Author Quiz</div>
+   <div className="container-fluid">
+     <Hero/>
+     <Turn/>
+     <Continue/>
+   </div>
   );
 }
 
