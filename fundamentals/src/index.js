@@ -55,18 +55,17 @@ function getTurnData(authors){
   const answer = sample(fourRandomBooks);
    
   return{
-
     books:fourRandomBooks,
     author: authors.find((author)=>
     author.books.some((title)=>
-        title==answer))
-  
+        title===answer))
   }
 }
 
 
 const state ={
-  turnData:getTurnData(authors)
+  turnData:getTurnData(authors),
+  highlight:'correct'
   };
 
 
