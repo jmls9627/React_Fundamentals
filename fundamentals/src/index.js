@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter,Router, Route} from 'react-router-dom'
+import { BrowserRouter, Route} from 'react-router-dom';//Router
 import './index.css';
 import AddAuthorForm from './AddAuthorForm'
 import AuthorQuiz from './AuthorQuiz';
@@ -82,13 +82,17 @@ const state ={
  return <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected}/>; 
  }
 
+function AuthorWrapper(){
+  return <AddAuthorForm onAddAuthor={console.log}/>;
+}
+
 function render(){
 ReactDOM.render(
   <React.StrictMode>
      <BrowserRouter>
        <React.Fragment>
          <Route exact path="/" component={App}/>
-         <Route path="/add" component={AddAuthorForm}/>
+         <Route path="/add" component={AuthorWrapper}/>
        </React.Fragment>
      </BrowserRouter>  
   </React.StrictMode>,
