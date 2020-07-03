@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route} from 'react-router-dom';//Router
+import { BrowserRouter, Route, withRouter} from 'react-router-dom';//Router
 import './index.css';
 import AddAuthorForm from './AddAuthorForm'
 import AuthorQuiz from './AuthorQuiz';
@@ -65,11 +65,14 @@ function getTurnData(authors){
   }
 }
 
+function resetState(){
+  return {
+    turnData:getTurnData(authors),
+    highlight:''
+    };
+}
 
-const state ={
-  turnData:getTurnData(authors),
-  highlight:''
-  };
+let state = resetState();
 
  function onAnswerSelected(answer){
  const isCorrect= state.turnData.author.books.some((book)=>book===answer);
@@ -79,12 +82,20 @@ const state ={
  
 
  function App(){
- return <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected}/>; 
+ return <AuthorQuiz {...state}
+  onAnswerSelected={onAnswerSelected}
+  onContinue={()=>{
+  state=resetState();
+  render();
+  }}/>; 
  }
 
-function AuthorWrapper(){
-  return <AddAuthorForm onAddAuthor={console.log}/>;
-}
+const AuthorWrapper=withRouter(({history})=>
+  <AddAuthorForm onAddAuthor={(author) =>{
+    authors.push(author);
+    history.push('/');
+  }}/>
+);
 
 function render(){
 ReactDOM.render(
