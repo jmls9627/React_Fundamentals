@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, withRouter} from 'react-router-dom';
+import { BrowserRouter, Route} from 'react-router-dom';
 import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 import './index.css';
@@ -72,44 +72,37 @@ function reducer(
    action) {
      switch (action.type){
        case 'ANSWER_SELECTED':
-         const isCorrect=state.turnData.author.books.some((book)=>book===action.turnData);
+         const isCorrect=state.turnData.author.books.some((book)=>book===action.answer);
           return Object.assign(
             {},
             state,{
-              highlight: isCorrect ? 'correct' : 'incorrect'
+              highlight: isCorrect ? 'correct' : 'wrong'
             });
             case 'CONTINUE':
               return Object.assign({},state,{
                highlight:'',
                turnData:getTurnData(state.authors)
               });
+              case 'ADD_AUTHOR':
+              return Object.assign({},state,{
+                authors:state.authors.concat([action.author])
+              })
               default: return state;
      }
 }
 
 let store =Redux.createStore(reducer);
 
- function App(){
- return <ReactRedux.Provider store={store}>
- <AuthorQuiz/>; 
-  </ReactRedux.Provider>;
- }
-
-const AuthorWrapper=withRouter(({history})=>
-  <AddAuthorForm onAddAuthor={(author) =>{
-    authors.push(author);
-    history.push('/');
-  }}/>
-);
-
 
 ReactDOM.render(
   <React.StrictMode>
      <BrowserRouter>
+     <ReactRedux.Provider store={store}>
        <React.Fragment>
-         <Route exact path="/" component={App}/>
-         <Route path="/add" component={AuthorWrapper}/>
+         <Route exact path="/" component={AuthorQuiz}/>
+         <Route path="/add" component={AddAuthorForm}/>
        </React.Fragment>
+       </ReactRedux.Provider>
      </BrowserRouter>  
   </React.StrictMode>,
   document.getElementById('root')
