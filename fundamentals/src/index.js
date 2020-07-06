@@ -67,36 +67,31 @@ function getTurnData(authors){
   }
 }
 
-function resetState(){
-  return {
-    turnData:getTurnData(authors),
-    highlight:''
-    };
-}
-
-
-function reducer( state, action){
- return state;
+function reducer( 
+  state={authors, turnData:getTurnData(authors), highlight:''},
+   action) {
+     switch (action.type){
+       case 'ANSWER_SELECTED':
+         const isCorrect=state.turnData.author.books.some((book)=>book===action.turnData);
+          return Object.assign(
+            {},
+            state,{
+              highlight: isCorrect ? 'correct' : 'incorrect'
+            });
+            case 'CONTINUE':
+              return Object.assign({},state,{
+               highlight:'',
+               turnData:getTurnData(state.authors)
+              });
+              default: return state;
+     }
 }
 
 let store =Redux.createStore(reducer);
-let state = resetState();
-
- function onAnswerSelected(answer){
- const isCorrect= state.turnData.author.books.some((book)=>book===answer);
- state.highlight=isCorrect ? 'correct' : 'incorrect';
- render();
- }
- 
 
  function App(){
  return <ReactRedux.Provider store={store}>
- <AuthorQuiz {...state}
-  onAnswerSelected={onAnswerSelected}
-  onContinue={()=>{
-  state=resetState();
-  render();
-  }}/>; 
+ <AuthorQuiz/>; 
   </ReactRedux.Provider>;
  }
 
@@ -107,7 +102,7 @@ const AuthorWrapper=withRouter(({history})=>
   }}/>
 );
 
-function render(){
+
 ReactDOM.render(
   <React.StrictMode>
      <BrowserRouter>
@@ -119,8 +114,8 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-}
-render();
+
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
